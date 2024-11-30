@@ -57,14 +57,18 @@ def clean_data(df):
 
     # Combine the original DataFrame with the new category columns, keeping all other columns
     df = pd.concat([df, categories], axis=1).drop('categories', axis=1)
-
+    # removing the rows with related value is 2
+    df = df[df['related']!= 2]
+    
     # Print the shape of the dataframe and the number of duplicates
     print(df.shape)
     print('number of duplicates:', df.duplicated().sum())
 
     # Drop duplicates
     df.drop_duplicates(inplace=True)
-    
+
+    # Check for duplicates after removing
+    assert len(df[df.duplicated()]) == 0
     return df
 
 def save_data(df, database_filename):
