@@ -2,3 +2,7 @@ pandas
 numpy
 plotly
 nbformat>=4.2.0
+pycodestyle
+pycodestyle_magic
+flake8
+kaleido
