@@ -1,4 +1,6 @@
 ### **Introduction**
+!['EDA Boston Airbnb data](images/thumbnail.webp)
+
 This analysis explores key trends and insights from Airbnb rental data in Boston, focusing on factors that influence rental performance and pricing strategies. Through exploratory data analysis (EDA) using Tableau Public, we aim to answer critical questions, such as the relationship between the number of bedrooms and rental prices, the gap between desired and actual prices, and seasonal variations in listing availability. By uncovering these insights, we provide practical recommendations for optimizing rental strategies on Airbnb, helping property owners and renters make data-driven decisions to maximize occupancy and revenue.
 
 ### **Boston Airbnb – Data Modeling**
