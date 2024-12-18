@@ -2,7 +2,7 @@
 
 The Sparkify project showcases how exploratory data analysis (EDA), feature engineering, and machine learning come together to solve a real-world challenge: understanding user behavior to predict customer churn. Here’s an in-depth walkthrough of the process, supported by visualizations and analysis.
 
-![](images\thumbnail.webp)
+![](images/thumbnail.webp)
 ---
 
 ## Table of Contents
@@ -28,7 +28,7 @@ The Sparkify project showcases how exploratory data analysis (EDA), feature engi
 ## Dataset Overview
 
 Sparkify provides user interaction logs, allowing us to analyze behaviors and predict churn (user cancellation). For this project, we used a subset of the dataset, `mini_sparkify_event_data.json`, consisting of \~128MB of data.
-![](images\data_info.PNG)
+![](images/data_info.PNG)
 
 ## Data Cleaning
 
@@ -42,7 +42,7 @@ Before diving into analysis, we cleaned the dataset:
 
 After cleaning, we had 225 unique users with complete interaction logs for analysis.
 
-![](images\churn_data.PNG)
+![](images/churn_data.PNG)
 ---
 
 ## Exploratory Data Analysis (EDA)
@@ -63,49 +63,49 @@ Churn was defined using the `Cancellation Confirmation` page event:
 
 We calculated the average song length per user:
 
-![](images\histograms_by_length.png)
+![](images/histograms_by_length.png)
 
 **Observation**: Listening patterns between churned and non-churned users were similar, averaging 200–300 seconds. This could indicate that listening time alone might not be a strong predictor of churn, as it shows no significant distinction between the two groups. Further exploration into other behavioral factors could provide more clarity.
 
 #### Gender Breakdown
 
-![](images\gender_distribution.png)
+![](images/gender_distribution.png)
 
 **Observation**: Male users were more likely to churn than female users. This could suggest differences in engagement or satisfaction levels between genders. Exploring specific patterns or behaviors unique to male users, such as music preferences or frequency of interaction, might provide further insights.
 
 #### User Level
 
-![](images\level_distribution.png)
+![](images/level_distribution.png)
 
 **Observation**: Free-tier users showed higher churn rates. This aligns with expectations, as free-tier users typically have less investment in the platform and may not feel as committed to continuing their subscription.
 
 #### Membership Duration
 
-![](images\membership_distribution.png)
+![](images/membership_distribution.png)
 
 **Observation**: Churned users often had memberships lasting fewer than 100 days. This observation suggests newer users are at higher risk of churn. Addressing this could involve improving the onboarding process, such as offering tailored recommendations, introductory tutorials, or exclusive incentives to increase early-stage engagement.
 
 #### User Activity
 
-![](images\avg_actions_distribution.png)
+![](images/avg_actions_distribution.png)
 - **Actions per Session**: Churned users averaged fewer than 100 actions per session.
 
-![](images\avg_artist_distribution.png)
+![](images/avg_artist_distribution.png)
 - **Artists per Session**: Churned users engaged with fewer than 100 artists per session.
 
 #### User Preferences
 
-![](images\like_dislike.PNG)
+![](images/like_dislike.PNG)
 
 - **Thumbs Up/Down**: Churned users gave fewer likes and dislikes.
 
-![](images\add_friends_histogram.png)
-![](images\histograms_add_to_playlist_by_churn.png)
+![](images/add_friends_histogram.png)
+![](images/histograms_add_to_playlist_by_churn.png)
 - **Friend and Playlist Additions**: Minimal friend or playlist interactions were noted among churned users.
 
 #### Operating System
 
-![](images\os_distribution_pie.png)
+![](images/os_distribution_pie.png)
 
 **Observation**: MacOS and Windows dominated, but churn was OS-agnostic. This is an interesting observation. Do you think the OS distribution could influence other behaviors not related to churn?
 
@@ -164,11 +164,11 @@ Random Forest emerged as the top performer. Hyperparameter tuning was applied to
 Conclusion
 The Sparkify project highlights the power of combining EDA, feature engineering, and machine learning to predict user behavior. By understanding churn drivers, businesses can implement targeted retention strategies, ensuring higher user satisfaction and reduced attrition.
 
-**Reflection**:
+### Reflection
 
 One of the most intriguing aspects of this project was the feature engineering process, particularly identifying and extracting behavioral signals such as membership duration and user engagement patterns. These insights not only enriched the dataset but also deepened our understanding of user behaviors. However, defining churn accurately presented significant challenges, as it required thoughtful consideration of event triggers and thresholds to ensure the model's relevance to real-world scenarios. These experiences underscore the critical balance between domain knowledge and technical expertise in solving data-driven problems.
 
-**Improvement**:
+### Improvement
 
 While the project successfully predicted churn, one notable area for improvement is the model's generalizability to new user behaviors. The Random Forest Classifier, though highly effective, relies on feature representations that are static. This approach may struggle to adapt to evolving user patterns or platform changes over time.
 
