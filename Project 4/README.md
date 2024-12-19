@@ -14,7 +14,7 @@ The Sparkify Project is designed to:
 3. Define the churn label based on user activities.
 4. Train models to predict user churn using PySpark MLlib.
 
-Details of the project can be found in the [notebook](Sparkify.ipynb) and blog post on [Sparkify Project](Sparkify-Blog.md)
+Details of the project can be found in the notebook and blog post on [Sparkify Project](Sparkify-Blog.md)
 
 ---
 
@@ -72,7 +72,7 @@ Models predict churn based on engineered features, enabling Sparkify to retain a
 ## How to Use
 
 1. **Setup**: Install dependencies using `pip install -r requirements.txt`.
-2. **Run Analysis**: Execute the [Jupyter Notebook](Sparkify.ipynb) for EDA and model training.
+2. **Run Analysis**: Execute the [Jupyter Notebook](Sparkify-EDA.ipynb) for EDA and [model training](Sparkify-AI-Model.ipynb).
 3. **Deploy Models**: Use the trained model in a production Spark cluster for real-time churn prediction.
 
 ---
