@@ -109,6 +109,7 @@ We calculated the average song length per user:
 
 **Observation**: MacOS and Windows dominated, but churn was OS-agnostic. This is an interesting observation. Do you think the OS distribution could influence other behaviors not related to churn?
 
+More detail about [EDA notebook](Sparkify-EDA.ipynb)
 ---
 
 ## Feature Engineering
@@ -126,6 +127,71 @@ We engineered features to capture behavioral insights for machine learning model
 
 ## Model Training
 
+
+### Modeling
+
+Split the full dataset into train, test, and validation sets. Test out several of the machine learning methods you learned. Evaluate the accuracy of the various models, tuning parameters as necessary. Determine your winning model based on test accuracy and report results on the validation set. Since the churned users are a fairly small subset, I suggest using F1 score as the metric to optimize.
+
+#### Data Imbalance Issue
+
+Churned users account for relatively few records in the training set:
+
+| churn | count |  
+|:-------|:------:|  
+|   0    |  173   |  
+|   1    |   52   |
+
+#### Evaluation Metrics
+
+Using accuracy alone can be misleading in imbalanced datasets. Instead, metrics such as **Precision**, **Recall**, **F1-Score**, and **ROC-AUC** are more effective in assessing performance. For multi-class problems, metrics like **macro-averaged F1-Score** or **weighted metrics** are preferable.
+
+#### Data Sampling Methods
+```python
+def compute_class_weights(train_data, label_col):
+    """
+    Computes class weights for handling imbalanced datasets and adds a sample weight column to the dataset.
+
+    This function calculates the weights for each class based on the inverse of their frequencies
+    in the dataset. Minority class samples receive higher weights, while majority class samples 
+    receive lower weights. The resulting weights are added as a new column, `weight`, to the dataset.
+
+    Args:
+        train_data (DataFrame): The input training dataset in PySpark containing the feature columns and labels.
+        label_col (str): The name of the column representing the class labels (binary: 0 or 1).
+
+    Returns:
+        DataFrame: A new dataset with an additional column named `weight`, containing the calculated weights for each sample.
+
+    Example:
+        weighted_train_data = compute_class_weights(train_data, "label")
+    """
+    # Calculate the count of majority and minority classes
+    majority_class_count = train_data.filter(col(label_col) == 0).count()
+    minority_class_count = train_data.filter(col(label_col) == 1).count()
+    
+    # Compute weights inversely proportional to the class counts
+    majority_weight = 1.0 / majority_class_count
+    minority_weight = 1.0 / minority_class_count
+    
+    # Add a new column 'weight' with calculated weights based on the class label
+    weighted_train_data = train_data.withColumn(
+        "weight",
+        when(col(label_col) == 0, lit(majority_weight))  # Assign majority weight for class 0
+        .otherwise(lit(minority_weight))  # Assign minority weight for class 1
+    )
+    
+    return weighted_train_data
+```
+
+The `compute_class_weights` method is designed to handle class imbalance in training datasets by calculating sample weights for each class. It computes the weights inversely proportional to the class frequencies, ensuring that minority class samples are given higher importance compared to majority class samples. The method adds a new column, `weight`, to the dataset, which can be used during model training to adjust the impact of each sample on the learning process. This approach helps mitigate bias towards majority classes and improves model performance, especially on imbalanced datasets.
+
+#### Suitable Models
+
+Some models are inherently better at handling imbalanced data. For example:
+- **Tree-based models** (e.g., Random Forest, XGBoost) with built-in class weighting.
+- **Logistic Regression** or **SVM** with adjusted class weights.
+- **Neural Networks** using loss functions like Focal Loss or Class-Balanced Loss.
+Additionally, ensemble techniques such as **Bagging** or **Boosting** can further improve performance.
 ### Model Selection
 
 We tested multiple models to identify the best-performing one:
@@ -139,18 +205,67 @@ We tested multiple models to identify the best-performing one:
 - **Feature Assembly**: Features were vectorized for modeling.
 - **Data Split**: 80% training and 20% testing.
 
-### Random Forest Tuning
+#### Training linear regression model 
+![](images/lr_output.PNG)
 
-Random Forest emerged as the top performer. Hyperparameter tuning was applied to optimize:
+Logistic Regression - F1 Score: 0.77, Weighted Recall: 0.75
+
+#### Training Random Forest model 
+![](images/rf_output.PNG)
+
+Random Forest - F1 Score: 0.78, Weighted Recall: 0.79
+
+#### Training Gradient-Boosted Trees model 
+![](images/gbt_output.PNG)
+
+Gradient-Boosted Trees - F1 Score: 0.73, Weighted Recall: 0.73
+
+!['Results'](images/round_1_output.png)
+Random Forest emerged as the top performer.
+
+### Tuning model
+
+#### Random Forest Tuning
+
+ Hyperparameter tuning was applied to optimize:
 
 - **Number of Trees**: Evaluated 50 and 100 trees.
 - **Tree Depth**: Tested depths of 5 and 10.
 
-## Results
+ Results
+- Tuned Random Forest Accuracy: 0.77
+- Tuned Random Forest F1: 0.76
+- Tuned Random Forest Weightedrecall: 0.77
+
+#### GBTClassifier Tuning
+
+GBTClassifier emerged as the top performer. Hyperparameter tuning was applied to optimize:
+
+- maxIter=[10, 20, 50], maxDepth=[3, 5, 7]
+
+ Results
+- Tuned GBTClassifier Accuracy: 0.79
+- Tuned GBTClassifier F1: 0.78
+- Tuned GBTClassifier Weightedrecall: 0.79
+
+#### LogisticRegression Tuning
+
+LogisticRegression emerged as the top performer. Hyperparameter tuning was applied to optimize:
+
+- regParam=[0.01, 0.1, 1.0], elasticNetParam=[0.0, 0.5, 1.0]
+
+ Results
+- Tuned LogisticRegression Accuracy: 0.87
+- Tuned LogisticRegression F1: 0.85
+- Tuned LogisticRegression Weightedrecall: 0.87
 
 ### Model Performance
 
-- **Best Model**: Random Forest achieved the highest accuracy and F1 score.
+![Results](images/round_2_output.png)
+
+- **Best Model**: LogisticRegression achieved the highest accuracy and F1 score.
+
+More detail about [AI model notebook](Sparkify-AI-Model.ipynb)
 
 ### Key Insights
 
